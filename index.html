@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>sync's weather app</title>
+  </head>
+  <body>
+    <h1>sync's weather app</h1>
+    <p>Enter your location to get the current weather:</p>
+    <form>
+      <input type="text" placeholder="Enter your location" id="location-input" />
+      <button type="submit">Get Weather</button>
+    </form>
+    <div id="weather-results"></div>
+  </body>
+  <style>
+    body {
+      background-image: url("https://media.istockphoto.com/id/479184640/photo/sunny-sky-background.jpg?s=1024x1024&w=is&k=20&c=6NALifvdx6lGJ7OTCziX_aViNyfdhLIniNCl47uXHVc=");
+      font-family: sans-serif;
+      text-align: center;
+      max-width: 500px;
+      margin: 20px auto;
+    }
+    input, button {
+      padding: 10px;
+      font-size: 16px;
+    }
+  </style>
+  <script>
+    const form = document.querySelector('form');
+    const input = document.querySelector('#location-input');
+
+    form.addEventListener('submit', function(event) {
+      event.preventDefault();
+
+      const location = input.value;
+
+      fetch(`https://api.openweathermap.org/data/2.5/weather?q=${location}&appid=369cd0e4a05b97f0b5bda250c62c1434`)
+        .then(function(response) {
+          return response.json();
+        })
+        .then(function(data) {
+          const results = document.querySelector('#weather-results');
+          results.innerHTML = `The current temperature in ${data.name} is ${data.main.temp} degrees. with a wind speed of ${data.wind.speed}km per hour`;
+        });
+    });
+  </script>
+</html>
