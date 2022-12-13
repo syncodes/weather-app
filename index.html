@@ -7,8 +7,12 @@
     <h1 style="font-size: 50px;">sync's weather app</h1>
     <h2>Click here</h2>
     <p>Enter your location to get the current weather:</p>
-    <p style="color: rgb(0, 0, 0);">Like a country or a city name</p>
+    <p style="color: antiquewhite;">Like a country or a city name</p>
     <form>
+    <select name="units" id="units">
+      <option value="imperial">Imperial</option>
+      <option value="metric">Metric</option>
+    </select>
       <input type="text" placeholder="Enter your location" id="location-input" />
       <button type="submit">Get Weather</button>
     </form>
@@ -17,8 +21,6 @@
   <style>
     body {
       background-image: url("https://images.hdqwalls.com/download/clouds-summer-weather-5k-1b-1920x1080.jpg");
-      background-repeat: no-repeat;
-      background-size: auto;
       font-family: sans-serif;
       text-align: center;
       max-width: 500px;
@@ -33,30 +35,52 @@
   <script>
     const form = document.querySelector('form');
     const input = document.querySelector('#location-input');
+    
+    function getUnitsValue() {
+     var units = document.getElementById('units'), unit, i;
+
+     for(i = 0; i < units.length; i++) {
+       unit = units[i];
+       if (unit.selected) {
+          return unit.value;
+       }
+     }
+   }
 
     form.addEventListener('submit', function(event) {
       event.preventDefault();
 
       const location = input.value;
-
-      fetch(`https://api.openweathermap.org/data/2.5/weather?q=${location}&appid=369cd0e4a05b97f0b5bda250c62c1434`)
+      let unit = getUnitsValue();
+      fetch(`https://api.openweathermap.org/data/2.5/weather?q=${location}&units=${unit}&appid=369cd0e4a05b97f0b5bda250c62c1434`)
         .then(function(response) {
           return response.json();
         })
         .then(function(data) {
+          
+          //console.log(tempFar, "farenheigt");
+
+         
           const results = document.querySelector('#weather-results');
+          let tempFar = data.main.temp;
+          console.log(data.main , "farenheigt");
+          let tempCel = Math.ceil(tempFar-32) * 5/9;
           results.innerHTML = `The current temperature in ${data.name} is ${data.main.temp} degrees. with a wind speed of ${data.wind.speed}km per hour`;
         });
+        
     });
   </script>
   <footer style="
-  position: fixed;
-  left: 0;
+  position:fixed;
+  padding: 10px 10px 10px 10px;
+  border: 10px 10px 10px 10px;
   bottom: 0;
+  left: 0;
   width: 100%;
-  background-color: rgb(11, 166, 249);
-  color: white;
-  text-align: center;
-
+  height: 100%;
+  width:100%;
+  height: 20px;
+  background-color: #D0DAEE;
   ">Copyright SYNC 2022</footer>
 </html>
+
